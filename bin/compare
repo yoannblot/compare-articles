@@ -27,22 +27,4 @@ $prismicDoc->loadHTML($prismicContent, LIBXML_NOERROR);
 $censhareDoc = new DOMDocument();
 $censhareDoc->loadHTML($censhareContent, LIBXML_NOERROR);
 
-logText("Check metadata...");
-checkMetaData(
-    $prismicDoc->getElementsByTagName('meta'),
-    $censhareDoc->getElementsByTagName('meta'),
-    'name',
-    'description'
-);
-checkMetaData(
-    $prismicDoc->getElementsByTagName('meta'),
-    $censhareDoc->getElementsByTagName('meta'),
-    'property',
-    'og:title'
-);
-checkMetaData(
-    $prismicDoc->getElementsByTagName('meta'),
-    $censhareDoc->getElementsByTagName('meta'),
-    'property',
-    'og:description'
-);
+checkAllMetaData($prismicDoc, $censhareDoc);
