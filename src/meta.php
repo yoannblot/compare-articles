@@ -31,7 +31,7 @@ function getValueOfAttribute(Dom $dom, $attributeName, $attributeValue)
 function checkAllMetaData(Dom $prismicDom, Dom $censhareDom)
 {
     logText('Check metadata...');
-    checkTag(
+    checkTagBySelector(
         $prismicDom,
         $censhareDom,
         'title'
@@ -56,9 +56,9 @@ function checkAllMetaData(Dom $prismicDom, Dom $censhareDom)
     );
 }
 
-function getTagValue(Dom $dom, $tagName)
+function getTagValueBySelector(Dom $dom, $selector)
 {
-    $collection = $dom->find($tagName);
+    $collection = $dom->find($selector);
 
     if (count($collection) === 0) {
         return null;
@@ -67,17 +67,5 @@ function getTagValue(Dom $dom, $tagName)
     /** @var Dom\HtmlNode $node */
     $node = $collection[0];
 
-    return $node->innerHtml();
-}
-
-function checkTag(Dom $prismicDom, Dom $censhareDom, $tagName)
-{
-    $prismicValue  = getTagValue($prismicDom, $tagName);
-    $censhareValue = getTagValue($censhareDom, $tagName);
-
-    if ($prismicValue !== $censhareValue) {
-        logText("Tag '<$tagName>' does not match! Prismic '$prismicValue' / Censhare '$censhareValue'");
-    } else {
-        logText("Tag '<$tagName>' is alright.");
-    }
+    return html_entity_decode($node->innerHtml());
 }

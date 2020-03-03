@@ -4,6 +4,11 @@ use PHPHtmlParser\Dom;
 
 function checkBreadcrumb(Dom $prismicDom, Dom $censhareDom)
 {
-    logText('Check breadcrumb...');
-    // TODO
+    logText('..................');
+    logText('...Check breadcrumb...');
+    logText('..................');
+    checkUrlTags($prismicDom, $censhareDom, '.breadcrumb-item__link', 'Rubric', 1);
+    checkUrlTags($prismicDom, $censhareDom, '.breadcrumb-item__link', 'Article', 2);
+    logText('..................');
+    logText('.......Done.......');
 }
