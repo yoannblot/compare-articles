@@ -1,7 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-require 'functions.php';
+define('ROOT_PATH', realpath(__DIR__ . '/..') . '/');
+
+require 'src/functions.php';
 
 logText('Check article migration form Censhare with Prismic');
 
@@ -28,3 +30,7 @@ $censhareDoc = new DOMDocument();
 $censhareDoc->loadHTML($censhareContent, LIBXML_NOERROR);
 
 checkAllMetaData($prismicDoc, $censhareDoc);
+checkBreadcrumb($prismicDoc, $censhareDoc);
+checkMainTags($prismicDoc, $censhareDoc);
+checkHeader($prismicDoc, $censhareDoc);
+checkContent($prismicDoc, $censhareDoc);
