@@ -25,8 +25,6 @@ $censhareContent = getHtmlContent($censhareUrl, 'Censhare');
 
 logText("Parsing contents...");
 
-// ...
-
 $prismicDom = new Dom();
 $prismicDom->loadStr($prismicContent);
 
