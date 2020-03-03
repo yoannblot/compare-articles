@@ -1,0 +1,48 @@
+#!/usr/bin/env php
+<?php
+
+require 'functions.php';
+
+logText('Check article migration form Censhare with Prismic');
+
+if ($argc < 3) {
+    logText('2 parameters needed : php censhare-article-migration [prismic URL] [censhare URL]');
+    exit;
+}
+
+list(, $prismicUrl, $censhareUrl) = $argv;
+
+logText("Prismic URL is '$prismicUrl'");
+logText("Censhare URL is '$censhareUrl'");
+
+$prismicContent  = getHtmlContent($prismicUrl, 'Prismic');
+$censhareContent = getHtmlContent($censhareUrl, 'Censhare');
+
+logText("Parsing contents...");
+// ...
+
+$prismicDoc = new DOMDocument();
+$prismicDoc->loadHTML($prismicContent, LIBXML_NOERROR);
+
+$censhareDoc = new DOMDocument();
+$censhareDoc->loadHTML($censhareContent, LIBXML_NOERROR);
+
+logText("Check metadata...");
+checkMetaData(
+    $prismicDoc->getElementsByTagName('meta'),
+    $censhareDoc->getElementsByTagName('meta'),
+    'name',
+    'description'
+);
+checkMetaData(
+    $prismicDoc->getElementsByTagName('meta'),
+    $censhareDoc->getElementsByTagName('meta'),
+    'property',
+    'og:title'
+);
+checkMetaData(
+    $prismicDoc->getElementsByTagName('meta'),
+    $censhareDoc->getElementsByTagName('meta'),
+    'property',
+    'og:description'
+);
