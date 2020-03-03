@@ -1,10 +1,8 @@
 <?php
 
-/**
- * @param DOMDocument $prismicDoc
- * @param DOMDocument $censhareDoc
- */
-function checkBreadcrumb(DOMDocument $prismicDoc, DOMDocument $censhareDoc)
+use PHPHtmlParser\Dom;
+
+function checkBreadcrumb(Dom $prismicDom, Dom $censhareDom)
 {
     logText('Check breadcrumb...');
     // TODO

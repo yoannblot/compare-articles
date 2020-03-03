@@ -1,9 +1,11 @@
 <?php
 
-function checkMetaData(DOMNodeList $prismicTags, DOMNodeList $censhareTags, $fieldName, $fieldValue)
+use PHPHtmlParser\Dom;
+
+function checkMetaData(Dom $prismicDom, Dom $censhareDom, $fieldName, $fieldValue)
 {
-    $prismicValue  = getValueOfAttribute($prismicTags, $fieldName, $fieldValue);
-    $censhareValue = getValueOfAttribute($censhareTags, $fieldName, $fieldValue);
+    $prismicValue  = getValueOfAttribute($prismicDom, $fieldName, $fieldValue);
+    $censhareValue = getValueOfAttribute($censhareDom, $fieldName, $fieldValue);
 
     if ($prismicValue !== $censhareValue) {
         logText("Meta $fieldValue does not match! Prismic '$prismicValue' / Censhare '$censhareValue'");
@@ -12,90 +14,66 @@ function checkMetaData(DOMNodeList $prismicTags, DOMNodeList $censhareTags, $fie
     }
 }
 
-function getTagValue(DOMNodeList $tags, $tagName)
+function getValueOfAttribute(Dom $dom, $attributeName, $attributeValue)
 {
-    foreach ($tags as $tag) {
-        /** @var DOMElement $tag */
-        if ($tag->tagName === $tagName) {
-            return $tag->nodeValue;
-        }
+    $selector   = "meta[$attributeName='$attributeValue']";
+    $collection = $dom->find($selector);
+    if (count($collection) === 0) {
+        return null;
     }
 
-    return null;
+    /** @var Dom\HtmlNode $node */
+    $node = $collection[0];
+
+    return $node->getAttribute('content');
 }
 
-function getValueOfAttribute(DOMNodeList $tags, $attributeName, $attributeValue)
-{
-    foreach ($tags as $tag) {
-        /** @var DOMElement $tag */
-        if (containsAttribute($tag, $attributeName, $attributeValue)) {
-            return getContentAttributeValue($tag);
-        }
-    }
-
-    return null;
-}
-
-function getContentAttributeValue(DOMElement $tag)
-{
-    foreach ($tag->attributes as $attribute) {
-        /** @var DOMAttr $attribute */
-        if ($attribute->name === 'content') {
-            return $attribute->value;
-        }
-    }
-
-    return null;
-}
-
-function containsAttribute(DOMElement $tag, $fieldName, $fieldValue)
-{
-    foreach ($tag->attributes as $attribute) {
-        /** @var DOMAttr $attribute */
-        if ($attribute->name === $fieldName && $attribute->value === $fieldValue) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-/**
- * @param DOMDocument $prismicDoc
- * @param DOMDocument $censhareDoc
- */
-function checkAllMetaData(DOMDocument $prismicDoc, DOMDocument $censhareDoc)
+function checkAllMetaData(Dom $prismicDom, Dom $censhareDom)
 {
     logText('Check metadata...');
     checkTag(
-        $prismicDoc->getElementsByTagName('meta'),
-        $censhareDoc->getElementsByTagName('meta'),
+        $prismicDom,
+        $censhareDom,
         'title'
     );
     checkMetaData(
-        $prismicDoc->getElementsByTagName('meta'),
-        $censhareDoc->getElementsByTagName('meta'),
+        $prismicDom,
+        $censhareDom,
         'name',
         'description'
     );
     checkMetaData(
-        $prismicDoc->getElementsByTagName('meta'),
-        $censhareDoc->getElementsByTagName('meta'),
+        $prismicDom,
+        $censhareDom,
         'property',
         'og:title'
     );
     checkMetaData(
-        $prismicDoc->getElementsByTagName('meta'),
-        $censhareDoc->getElementsByTagName('meta'),
+        $prismicDom,
+        $censhareDom,
         'property',
         'og:description'
     );
 }
 
-function checkTag(DOMNodeList $prismicTags, DOMNodeList $censhareTags, $tagName)
+function getTagValue(Dom $dom, $tagName)
 {
-    $prismicValue  = getTagValue($prismicTags, $tagName);
-    $censhareValue = getTagValue($censhareTags, $tagName);
+    $collection = $dom->find($tagName);
+
+    if (count($collection) === 0) {
+        return null;
+    }
+
+    /** @var Dom\HtmlNode $node */
+    $node = $collection[0];
+
+    return $node->innerHtml();
+}
+
+function checkTag(Dom $prismicDom, Dom $censhareDom, $tagName)
+{
+    $prismicValue  = getTagValue($prismicDom, $tagName);
+    $censhareValue = getTagValue($censhareDom, $tagName);
 
     if ($prismicValue !== $censhareValue) {
         logText("Tag '<$tagName>' does not match! Prismic '$prismicValue' / Censhare '$censhareValue'");

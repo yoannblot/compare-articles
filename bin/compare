@@ -1,8 +1,11 @@
 #!/usr/bin/env php
 <?php
 
+use PHPHtmlParser\Dom;
+
 define('ROOT_PATH', realpath(__DIR__ . '/..') . '/');
 
+require ROOT_PATH . 'vendor/autoload.php';
 require 'src/functions.php';
 
 logText('Check article migration form Censhare with Prismic');
@@ -12,7 +15,7 @@ if ($argc < 3) {
     exit;
 }
 
-list(, $prismicUrl, $censhareUrl) = $argv;
+[, $prismicUrl, $censhareUrl] = $argv;
 
 logText("Prismic URL is '$prismicUrl'");
 logText("Censhare URL is '$censhareUrl'");
@@ -21,16 +24,17 @@ $prismicContent  = getHtmlContent($prismicUrl, 'Prismic');
 $censhareContent = getHtmlContent($censhareUrl, 'Censhare');
 
 logText("Parsing contents...");
+
 // ...
 
-$prismicDoc = new DOMDocument();
-$prismicDoc->loadHTML($prismicContent, LIBXML_NOERROR);
+$prismicDom = new Dom();
+$prismicDom->loadStr($prismicContent);
 
-$censhareDoc = new DOMDocument();
-$censhareDoc->loadHTML($censhareContent, LIBXML_NOERROR);
+$censhareDom = new Dom();
+$censhareDom->loadStr($censhareContent);
 
-checkAllMetaData($prismicDoc, $censhareDoc);
-checkBreadcrumb($prismicDoc, $censhareDoc);
-checkMainTags($prismicDoc, $censhareDoc);
-checkHeader($prismicDoc, $censhareDoc);
-checkContent($prismicDoc, $censhareDoc);
+checkAllMetaData($prismicDom, $censhareDom);
+checkBreadcrumb($prismicDom, $censhareDom);
+checkMainTags($prismicDom, $censhareDom);
+checkHeader($prismicDom, $censhareDom);
+checkContent($prismicDom, $censhareDom);

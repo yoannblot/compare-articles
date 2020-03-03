@@ -1,10 +1,8 @@
 <?php
 
-/**
- * @param DOMDocument $prismicDoc
- * @param DOMDocument $censhareDoc
- */
-function checkMainTags(DOMDocument $prismicDoc, DOMDocument $censhareDoc)
+use PHPHtmlParser\Dom;
+
+function checkMainTags(Dom $prismicDom, Dom $censhareDom)
 {
     logText('Check main tags...');
     // TODO

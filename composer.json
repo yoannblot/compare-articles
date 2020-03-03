@@ -1,0 +1,13 @@
+{
+    "name": "yoannblot/compare-articles",
+    "description": "Compare two articles by URLs",
+    "authors": [
+        {
+            "name": "Yoann Blot",
+            "email": "yoann.blot@gmail.com"
+        }
+    ],
+    "require": {
+        "paquettg/php-html-parser": "^2.2"
+    }
+}

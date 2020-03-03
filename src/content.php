@@ -1,9 +1,8 @@
 <?php
-/**
- * @param DOMDocument $prismicDoc
- * @param DOMDocument $censhareDoc
- */
-function checkContent(DOMDocument $prismicDoc, DOMDocument $censhareDoc)
+
+use PHPHtmlParser\Dom;
+
+function checkContent(Dom $prismicDom, Dom $censhareDom)
 {
     logText('Check content...');
     // TODO
