@@ -35,7 +35,9 @@ $prismicDom->loadStr($prismicContent, []);
 $censhareDom = new Dom();
 $censhareDom->loadStr($censhareContent, []);
 
-checkAllMetaData($prismicDom, $censhareDom);
+if (strpos($censhareUrl, '/preview/') === false) {
+    checkAllMetaData($prismicDom, $censhareDom);
+}
 checkBreadcrumb($prismicDom, $censhareDom);
 checkMainTags($prismicDom, $censhareDom);
 checkHeader($prismicDom, $censhareDom);
