@@ -11,6 +11,9 @@ $prismicUrl  = $_GET['prismic'] ?? null;
 $censhareUrl = $_GET['censhare'] ?? null;
 ?>
 <html>
+<head>
+    <link rel="stylesheet" href="css/styles.css" type="text/css" charset="utf-8"/>
+</head>
 <body>
 <h1>Compare Prismic and Censhare URLs</h1>
 <?php

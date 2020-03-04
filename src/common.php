@@ -4,18 +4,16 @@ use PHPHtmlParser\Dom;
 
 function logError($text, $prismicValue = '', $censhareValue = '')
 {
-    // TODO find a way to display diff between sentences
-
     echo '<p style="color: red;font-weight: bold;"> /!\ ' . $text . '</p>';
     if ($prismicValue !== '') {
-        ?>
-        <dl>
-            <dt>Prismic</dt>
-            <dd><?= $prismicValue; ?></dd>
-            <dt>Censhare</dt>
-            <dd><?= $censhareValue; ?></dd>
-        </dl>
-        <?php
+        $diff = new Diff(
+            [$prismicValue], [$censhareValue], [
+            'ignoreNewLines'   => true,
+            'ignoreWhitespace' => true,
+            'ignoreCase'       => true
+        ]
+        );
+        echo $diff->render(new Diff_Renderer_Html_Inline());
     }
 }
 

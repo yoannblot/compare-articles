@@ -69,7 +69,7 @@ function checkRichTextModuleTag(Dom $prismicDom, Dom $censhareDom, $tagName)
 function cleanHtmlTag(string $htmlContent): string
 {
     $htmlContent = str_replace('&nbsp;', ' ', $htmlContent);
-    $htmlContent = str_replace(['  ', ' <'], [' ', '<'], $htmlContent);
+    $htmlContent = str_replace(['  ', ' <', 'target="_blank"', 'rel="noopener"'], [' ', '<', '', ''], $htmlContent);
     $htmlContent = trim(html_entity_decode($htmlContent));
 
     return $htmlContent;

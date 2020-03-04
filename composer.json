@@ -1,13 +1,15 @@
 {
-    "name": "yoannblot/compare-articles",
-    "description": "Compare two articles by URLs",
-    "authors": [
-        {
-            "name": "Yoann Blot",
-            "email": "yoann.blot@gmail.com"
-        }
-    ],
-    "require": {
-        "paquettg/php-html-parser": "^2.2"
+  "name": "yoannblot/compare-articles",
+  "description": "Compare two articles by URLs",
+  "authors": [
+    {
+      "name": "Yoann Blot",
+      "email": "yoann.blot@gmail.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "paquettg/php-html-parser": "^2.2",
+    "phpspec/php-diff": "^1.0@dev"
+  }
 }
