@@ -23,7 +23,7 @@ logInfo("Censhare URL is '$censhareUrl'");
 $prismicContent  = getHtmlContent($prismicUrl, 'Prismic');
 $censhareContent = getHtmlContent($censhareUrl, 'Censhare');
 
-logInfo("Parsing contents...");
+logInfo("Parsing contents");
 
 $prismicDom = new Dom();
 $prismicDom->loadStr($prismicContent);

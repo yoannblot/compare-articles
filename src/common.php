@@ -4,17 +4,18 @@ use PHPHtmlParser\Dom;
 
 function logError($text)
 {
-    echo '/!\ ' . $text . PHP_EOL;
+    echo ' /!\ ' . $text . PHP_EOL;
 }
 
 function logSuccess($text)
 {
-    echo $text . PHP_EOL;
+    echo ' [OK] ' . $text . PHP_EOL;
 }
 
 function logInfo($text)
 {
-    echo $text . PHP_EOL;
+    echo '..................' . PHP_EOL;
+    echo '...' . $text . '...' . PHP_EOL;
 }
 
 function getHtmlContent($url, $type)

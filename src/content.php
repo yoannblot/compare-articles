@@ -4,14 +4,10 @@ use PHPHtmlParser\Dom;
 
 function checkContent(Dom $prismicDom, Dom $censhareDom)
 {
-    logInfo('..................');
-    logInfo('...Check content...');
-    logInfo('..................');
+    logInfo('Check content');
     checkHtmlModules($prismicDom, $censhareDom);
     checkOfferModules($prismicDom, $censhareDom);
     checkMediaModules($prismicDom, $censhareDom);
-    logInfo('..................');
-    logInfo('.......Done.......');
 }
 
 function checkHtmlModules(Dom $prismicDom, Dom $censhareDom)

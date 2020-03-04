@@ -30,9 +30,7 @@ function getValueOfAttribute(Dom $dom, $attributeName, $attributeValue)
 
 function checkAllMetaData(Dom $prismicDom, Dom $censhareDom)
 {
-    logInfo('..................');
-    logInfo('...Check metadata...');
-    logInfo('..................');
+    logInfo('Check metadata');
 
     checkTagBySelector(
         $prismicDom,
@@ -57,8 +55,6 @@ function checkAllMetaData(Dom $prismicDom, Dom $censhareDom)
         'property',
         'og:description'
     );
-    logInfo('..................');
-    logInfo('.......Done.......');
 }
 
 function getTagValueBySelector(Dom $dom, $selector)
