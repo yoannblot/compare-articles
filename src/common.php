@@ -8,10 +8,10 @@ function logError($text, $prismicValue = '', $censhareValue = '')
     if ($prismicValue !== '') {
         $diff = new Diff(
             [$prismicValue], [$censhareValue], [
-            'ignoreNewLines'   => true,
-            'ignoreWhitespace' => true,
-            'ignoreCase'       => true
-        ]
+                               'ignoreNewLines'   => true,
+                               'ignoreWhitespace' => true,
+                               'ignoreCase'       => true
+                           ]
         );
         echo $diff->render(new Diff_Renderer_Html_Inline());
     }
@@ -64,6 +64,15 @@ function checkTagBySelector(Dom $prismicDom, Dom $censhareDom, $selector, $strip
     return true;
 }
 
+function cleanHtmlTag(string $htmlContent): string
+{
+    $htmlContent = str_replace('&nbsp;', ' ', $htmlContent);
+    $htmlContent = str_replace(['  ', ' <', 'target="_blank"', 'rel="noopener"'], [' ', '<', '', ''], $htmlContent);
+    $htmlContent = trim(html_entity_decode($htmlContent));
+
+    return $htmlContent;
+}
+
 function getUrlTag(Dom $dom, $selector, $position)
 {
     $collection = $dom->find($selector);
@@ -77,8 +86,8 @@ function getUrlTag(Dom $dom, $selector, $position)
     /** @var Dom\HtmlNode $node */
     $node = $collection[$position];
 
-    $text = trim($node->innerHtml());
-    $href = $node->getAttribute('href');
+    $text = cleanHtmlTag($node->innerHtml());
+    $href = str_replace('/hcms', '', parse_url($node->getAttribute('href'))['path']);
 
     return [
         'value' => $text,
@@ -93,16 +102,16 @@ function checkUrlTags(Dom $prismicDom, Dom $censhareDom, $selector, $tagName, $p
 
     if ($prismicTag['value'] !== $censhareTag['value']) {
         logError(
-            "$tagName tag does not match!",
+            "$tagName text tag does not match!",
             $prismicTag['value'],
             $censhareTag['value']
         );
 
         return;
     }
-    if (!areSameUrls($prismicTag['url'], $censhareTag['url'])) {
+    if ($prismicTag['url'] !== $censhareTag['url']) {
         logError(
-            "$tagName tag does not match!",
+            "$tagName URL tag does not match!",
             $prismicTag['url'],
             $censhareTag['url']
         );
@@ -111,14 +120,4 @@ function checkUrlTags(Dom $prismicDom, Dom $censhareDom, $selector, $tagName, $p
     }
 
     logSuccess("$tagName tag is alright . ");
-}
-
-function areSameUrls($prismicUrl, $censhareUrl)
-{
-    $prismicUri  = parse_url($prismicUrl)['path'];
-    $censhareUri = parse_url($censhareUrl)['path'];
-
-    $censhareUri = str_replace('/hcms', '', $censhareUri);
-
-    return $prismicUri === $censhareUri;
 }

@@ -10,8 +10,10 @@ require_once 'src/functions.php';
 $prismicUrl  = $_GET['prismic'] ?? null;
 $censhareUrl = $_GET['censhare'] ?? null;
 ?>
-<html>
+<!doctype html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="css/styles.css" type="text/css" charset="utf-8"/>
 </head>
 <body>

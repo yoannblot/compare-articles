@@ -6,7 +6,8 @@ function checkContent(Dom $prismicDom, Dom $censhareDom)
 {
     logInfo('Check content');
     checkRichTextModules($prismicDom, $censhareDom);
-    checkOfferModules($prismicDom, $censhareDom);
+    checkEditoCardModules($prismicDom, $censhareDom);
+    checkAgencyCardModules($prismicDom, $censhareDom);
     checkMediaModules($prismicDom, $censhareDom);
 }
 
@@ -68,16 +69,40 @@ function checkRichTextModuleTag(Dom $prismicDom, Dom $censhareDom, $tagName)
     return false;
 }
 
-function cleanHtmlTag(string $htmlContent): string
+function checkAgencyCardModules(Dom $prismicDom, Dom $censhareDom)
 {
-    $htmlContent = str_replace('&nbsp;', ' ', $htmlContent);
-    $htmlContent = str_replace(['  ', ' <', 'target="_blank"', 'rel="noopener"'], [' ', '<', '', ''], $htmlContent);
-    $htmlContent = trim(html_entity_decode($htmlContent));
+    $prismicModules  = $prismicDom->find('.content-module-agency-cards.content-module');
+    $censhareModules = $censhareDom->find('.content-module-agency-cards.content-module');
 
-    return $htmlContent;
+    $totalPrismicModules  = count($prismicModules);
+    $totalCenshareModules = count($censhareModules);
+    if ($totalPrismicModules !== $totalCenshareModules) {
+        logError(
+            'Total AgencyCard module does not match!',
+            $totalPrismicModules,
+            $totalCenshareModules
+        );
+
+        return false;
+    }
+
+    if ($totalPrismicModules === 0) {
+        return true;
+    }
+
+    logSuccess("Total AgencyCard module match : $totalPrismicModules");
+
+    for ($position = 0; $position < $totalPrismicModules; $position++) {
+        checkUrlTags(
+            $prismicModules[$position],
+            $censhareModules[$position],
+            '.large-agency-card__title',
+            'Agency link'
+        );
+    }
 }
 
-function checkOfferModules(Dom $prismicDom, Dom $censhareDom)
+function checkEditoCardModules(Dom $prismicDom, Dom $censhareDom)
 {
     $prismicModules  = $prismicDom->find('.content-module-edito-cards.content-module');
     $censhareModules = $censhareDom->find('.content-module-edito-cards.content-module');
