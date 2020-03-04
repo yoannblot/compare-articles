@@ -8,7 +8,7 @@ function checkMetaData(Dom $prismicDom, Dom $censhareDom, $fieldName, $fieldValu
     $censhareValue = getValueOfAttribute($censhareDom, $fieldName, $fieldValue);
 
     if ($prismicValue !== $censhareValue) {
-        logError("Meta $fieldValue does not match! Prismic '$prismicValue' / Censhare '$censhareValue'");
+        logError("Meta $fieldValue does not match!", $prismicValue, $censhareValue);
     } else {
         logSuccess("Meta $fieldValue is alright.");
     }

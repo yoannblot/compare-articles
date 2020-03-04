@@ -2,23 +2,35 @@
 
 use PHPHtmlParser\Dom;
 
-function logError($text)
+function logError($text, $prismicValue = '', $censhareValue = '')
 {
-    echo ' /!\ ' . $text . PHP_EOL;
+    // TODO find a way to display diff between sentences
+
+    echo '<p style="color: red;font-weight: bold;"> /!\ ' . $text . '</p>';
+    if ($prismicValue !== '') {
+        ?>
+        <dl>
+            <dt>Prismic</dt>
+            <dd><?= $prismicValue; ?></dd>
+            <dt>Censhare</dt>
+            <dd><?= $censhareValue; ?></dd>
+        </dl>
+        <?php
+    }
 }
 
 function logSuccess($text)
 {
-    echo ' [OK] ' . $text . PHP_EOL;
+    echo '<p style="color: green;">  [OK] ' . $text . '</p>';
 }
 
 function logInfo($text)
 {
-    echo '..................' . PHP_EOL;
-    echo '...' . $text . '...' . PHP_EOL;
+    echo '<hr>';
+    echo '<h3>' . $text . '</h3>';
 }
 
-function getHtmlContent($url, $type)
+function getHtmlContent($url)
 {
     $cacheFile = ROOT_PATH . 'var/cache/' . md5($url);
     if (!file_exists($cacheFile)) {
@@ -28,9 +40,7 @@ function getHtmlContent($url, $type)
                 'verify_peer_name' => false,
             ],
         ];
-        logError("Getting $type content...");
         file_put_contents($cacheFile, file_get_contents($url, false, stream_context_create($arrContextOptions)));
-        logError("$type content retrieved!");
     }
 
     return file_get_contents($cacheFile);
@@ -46,12 +56,12 @@ function checkTagBySelector(Dom $prismicDom, Dom $censhareDom, $selector, $strip
     }
 
     if ($prismicValue !== $censhareValue) {
-        logError("'$selector' does not match! Prismic '$prismicValue' / Censhare '$censhareValue'");
+        logError("'$selector' does not match!", $prismicValue, $censhareValue);
 
         return false;
     }
 
-    logSuccess("'$selector' is alright.");
+    logSuccess("'$selector' is alright . ");
 
     return true;
 }
@@ -85,20 +95,24 @@ function checkUrlTags(Dom $prismicDom, Dom $censhareDom, $selector, $tagName, $p
 
     if ($prismicTag['value'] !== $censhareTag['value']) {
         logError(
-            "$tagName tag does not match! Prismic '{$prismicTag['value']}' / Censhare '{$censhareTag['value']}'"
+            "$tagName tag does not match!",
+            $prismicTag['value'],
+            $censhareTag['value']
         );
 
         return;
     }
     if (!areSameUrls($prismicTag['url'], $censhareTag['url'])) {
         logError(
-            "$tagName tag does not match! Prismic '{$prismicTag['url']}' / Censhare '{$censhareTag['url']}'"
+            "$tagName tag does not match!",
+            $prismicTag['url'],
+            $censhareTag['url']
         );
 
         return;
     }
 
-    logSuccess("$tagName tag is alright.");
+    logSuccess("$tagName tag is alright . ");
 }
 
 function areSameUrls($prismicUrl, $censhareUrl)

@@ -28,10 +28,9 @@ function checkRichTextModuleTag(Dom $prismicDom, Dom $censhareDom, $tagName)
 
     $totalPrismicModules  = count($prismicModules);
     $totalCenshareModules = count($censhareModules);
-
     if ($totalPrismicModules !== $totalCenshareModules) {
         logError(
-            "Total <$tagName> tags does not match : $totalPrismicModules in Prismic // $totalCenshareModules in Censhare"
+            "Total &lt;$tagName&gt; tags does not match : $totalPrismicModules in Prismic // $totalCenshareModules in Censhare"
         );
 
         return false;
@@ -41,24 +40,25 @@ function checkRichTextModuleTag(Dom $prismicDom, Dom $censhareDom, $tagName)
         return true;
     }
 
-    logSuccess("Total <$tagName> tags match : $totalPrismicModules");
+    logSuccess("Total &lt;$tagName&gt; tags match : $totalPrismicModules");
 
     $error = false;
     for ($position = 0; $position < $totalPrismicModules; $position++) {
-        $prismicParagrap  = cleanHtmlTag($prismicModules[$position]->innerHtml());
-        $censhareParagrap = cleanHtmlTag($censhareModules[$position]->innerHtml());
+        $prismicTag  = cleanHtmlTag($prismicModules[$position]->innerHtml());
+        $censhareTag = cleanHtmlTag($censhareModules[$position]->innerHtml());
 
-        if ($prismicParagrap !== $censhareParagrap) {
-            // TODO find a way to display diff between sentences
+        if ($prismicTag !== $censhareTag) {
             logError(
-                "<$tagName> does not match : " . PHP_EOL . ">>$prismicParagrap<<" . PHP_EOL . ">>$censhareParagrap<<"
+                "&lt;$tagName&gt; does not match!",
+                $prismicTag,
+                $censhareTag
             );
             $error = true;
         }
     }
 
     if (!$error) {
-        logSuccess("All <$tagName> match!");
+        logSuccess("All &lt;$tagName&gt; match!");
 
         return true;
     }
