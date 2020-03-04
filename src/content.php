@@ -30,7 +30,9 @@ function checkRichTextModuleTag(Dom $prismicDom, Dom $censhareDom, $tagName)
     $totalCenshareModules = count($censhareModules);
     if ($totalPrismicModules !== $totalCenshareModules) {
         logError(
-            "Total &lt;$tagName&gt; tags does not match : $totalPrismicModules in Prismic // $totalCenshareModules in Censhare"
+            "Total &lt;$tagName&gt; tags does not match!",
+            $totalPrismicModules,
+            $totalCenshareModules
         );
 
         return false;
@@ -77,7 +79,54 @@ function cleanHtmlTag(string $htmlContent): string
 
 function checkOfferModules(Dom $prismicDom, Dom $censhareDom)
 {
-    // TODO
+    $prismicModules  = $prismicDom->find('.content-module-edito-cards.content-module');
+    $censhareModules = $censhareDom->find('.content-module-edito-cards.content-module');
+
+    $totalPrismicModules  = count($prismicModules);
+    $totalCenshareModules = count($censhareModules);
+    if ($totalPrismicModules !== $totalCenshareModules) {
+        logError(
+            'Total EditoCard module does not match!',
+            $totalPrismicModules,
+            $totalCenshareModules
+        );
+
+        return false;
+    }
+
+    if ($totalPrismicModules === 0) {
+        return true;
+    }
+
+    logSuccess("Total EditoCard module match : $totalPrismicModules");
+
+    $error = false;
+    for ($position = 0; $position < $totalPrismicModules; $position++) {
+        // TODO check title
+        // TODO check url
+        // TODO check description
+        // TODO check alt image text
+
+        $prismicModule  = cleanHtmlTag($prismicModules[$position]->innerHtml());
+        $censhareModule = cleanHtmlTag($censhareModules[$position]->innerHtml());
+
+        if ($prismicModule !== $censhareModule) {
+            logError(
+                "EditoCard module does not match!",
+                $prismicModule,
+                $censhareModule
+            );
+            $error = true;
+        }
+    }
+
+    if (!$error) {
+        logSuccess("All EditoCard modules match!");
+
+        return true;
+    }
+
+    return false;
 }
 
 function checkMediaModules(Dom $prismicDom, Dom $censhareDom)
