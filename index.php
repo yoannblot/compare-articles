@@ -30,10 +30,10 @@ $prismicContent  = getHtmlContent($prismicUrl);
 $censhareContent = getHtmlContent($censhareUrl);
 
 $prismicDom = new Dom();
-$prismicDom->loadStr($prismicContent);
+$prismicDom->loadStr($prismicContent, []);
 
 $censhareDom = new Dom();
-$censhareDom->loadStr($censhareContent);
+$censhareDom->loadStr($censhareContent, []);
 
 checkAllMetaData($prismicDom, $censhareDom);
 checkBreadcrumb($prismicDom, $censhareDom);
