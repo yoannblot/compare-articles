@@ -2,7 +2,17 @@
 
 use PHPHtmlParser\Dom;
 
-function logText($text)
+function logError($text)
+{
+    echo '/!\ ' . $text . PHP_EOL;
+}
+
+function logSuccess($text)
+{
+    echo $text . PHP_EOL;
+}
+
+function logInfo($text)
 {
     echo $text . PHP_EOL;
 }
@@ -17,9 +27,9 @@ function getHtmlContent($url, $type)
                 'verify_peer_name' => false,
             ],
         ];
-        logText("Getting $type content...");
+        logError("Getting $type content...");
         file_put_contents($cacheFile, file_get_contents($url, false, stream_context_create($arrContextOptions)));
-        logText("$type content retrieved!");
+        logError("$type content retrieved!");
     }
 
     return file_get_contents($cacheFile);
@@ -35,12 +45,12 @@ function checkTagBySelector(Dom $prismicDom, Dom $censhareDom, $selector, $strip
     }
 
     if ($prismicValue !== $censhareValue) {
-        logText("'$selector' does not match! Prismic '$prismicValue' / Censhare '$censhareValue'");
+        logError("'$selector' does not match! Prismic '$prismicValue' / Censhare '$censhareValue'");
 
         return false;
     }
 
-    logText("'$selector' is alright.");
+    logSuccess("'$selector' is alright.");
 
     return true;
 }
@@ -73,21 +83,21 @@ function checkUrlTags(Dom $prismicDom, Dom $censhareDom, $selector, $tagName, $p
     $censhareTag = getUrlTag($censhareDom, $selector, $position);
 
     if ($prismicTag['value'] !== $censhareTag['value']) {
-        logText(
+        logError(
             "$tagName tag does not match! Prismic '{$prismicTag['value']}' / Censhare '{$censhareTag['value']}'"
         );
 
         return;
     }
     if (!areSameUrls($prismicTag['url'], $censhareTag['url'])) {
-        logText(
+        logError(
             "$tagName tag does not match! Prismic '{$prismicTag['url']}' / Censhare '{$censhareTag['url']}'"
         );
 
         return;
     }
 
-    logText("$tagName tag is alright.");
+    logSuccess("$tagName tag is alright.");
 }
 
 function areSameUrls($prismicUrl, $censhareUrl)

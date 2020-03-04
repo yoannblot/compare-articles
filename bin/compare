@@ -8,22 +8,22 @@ define('ROOT_PATH', realpath(__DIR__ . '/..') . '/');
 require ROOT_PATH . 'vendor/autoload.php';
 require 'src/functions.php';
 
-logText('Check article migration form Censhare with Prismic');
+logInfo('Check article migration form Censhare with Prismic');
 
 if ($argc < 3) {
-    logText('2 parameters needed : php censhare-article-migration [prismic URL] [censhare URL]');
+    logError('2 parameters needed : php censhare-article-migration [prismic URL] [censhare URL]');
     exit;
 }
 
 [, $prismicUrl, $censhareUrl] = $argv;
 
-logText("Prismic URL is '$prismicUrl'");
-logText("Censhare URL is '$censhareUrl'");
+logInfo("Prismic URL is '$prismicUrl'");
+logInfo("Censhare URL is '$censhareUrl'");
 
 $prismicContent  = getHtmlContent($prismicUrl, 'Prismic');
 $censhareContent = getHtmlContent($censhareUrl, 'Censhare');
 
-logText("Parsing contents...");
+logInfo("Parsing contents...");
 
 $prismicDom = new Dom();
 $prismicDom->loadStr($prismicContent);

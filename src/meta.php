@@ -8,9 +8,9 @@ function checkMetaData(Dom $prismicDom, Dom $censhareDom, $fieldName, $fieldValu
     $censhareValue = getValueOfAttribute($censhareDom, $fieldName, $fieldValue);
 
     if ($prismicValue !== $censhareValue) {
-        logText("Meta $fieldValue does not match! Prismic '$prismicValue' / Censhare '$censhareValue'");
+        logError("Meta $fieldValue does not match! Prismic '$prismicValue' / Censhare '$censhareValue'");
     } else {
-        logText("Meta $fieldValue is alright.");
+        logSuccess("Meta $fieldValue is alright.");
     }
 }
 
@@ -30,7 +30,10 @@ function getValueOfAttribute(Dom $dom, $attributeName, $attributeValue)
 
 function checkAllMetaData(Dom $prismicDom, Dom $censhareDom)
 {
-    logText('Check metadata...');
+    logInfo('..................');
+    logInfo('...Check metadata...');
+    logInfo('..................');
+
     checkTagBySelector(
         $prismicDom,
         $censhareDom,
@@ -54,6 +57,8 @@ function checkAllMetaData(Dom $prismicDom, Dom $censhareDom)
         'property',
         'og:description'
     );
+    logInfo('..................');
+    logInfo('.......Done.......');
 }
 
 function getTagValueBySelector(Dom $dom, $selector)
