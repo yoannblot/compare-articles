@@ -5,31 +5,39 @@ use PHPHtmlParser\Dom;
 function checkContent(Dom $prismicDom, Dom $censhareDom)
 {
     logInfo('Check content');
-    checkHtmlModules($prismicDom, $censhareDom);
+    checkRichTextModules($prismicDom, $censhareDom);
     checkOfferModules($prismicDom, $censhareDom);
     checkMediaModules($prismicDom, $censhareDom);
 }
 
-function checkHtmlModules(Dom $prismicDom, Dom $censhareDom)
+function checkRichTextModules(Dom $prismicDom, Dom $censhareDom)
 {
-    checkHtmlTag($prismicDom, $censhareDom, 'p');
-    checkHtmlTag($prismicDom, $censhareDom, 'h2');
-    checkHtmlTag($prismicDom, $censhareDom, 'h3');
+    checkRichTextModuleTag($prismicDom, $censhareDom, 'h2');
+    checkRichTextModuleTag($prismicDom, $censhareDom, 'h3');
+    checkRichTextModuleTag($prismicDom, $censhareDom, 'h4');
+    checkRichTextModuleTag($prismicDom, $censhareDom, 'h5');
+    checkRichTextModuleTag($prismicDom, $censhareDom, 'h6');
+    checkRichTextModuleTag($prismicDom, $censhareDom, 'p');
 }
 
-function checkHtmlTag(Dom $prismicDom, Dom $censhareDom, $tagName)
+function checkRichTextModuleTag(Dom $prismicDom, Dom $censhareDom, $tagName)
 {
     $prismicModules  = $prismicDom->find('.content-module.content-module-rich-text > ' . $tagName);
     $censhareModules = $censhareDom->find('.content-module.content-module-rich-text > ' . $tagName);
 
     $totalPrismicModules  = count($prismicModules);
     $totalCenshareModules = count($censhareModules);
+
     if ($totalPrismicModules !== $totalCenshareModules) {
         logError(
             "Total <$tagName> HTML modules does not match : $totalPrismicModules in Prismic // $totalCenshareModules in Censhare"
         );
 
         return false;
+    }
+
+    if ($totalPrismicModules === 0) {
+        return true;
     }
 
     logSuccess("Total <$tagName> HTML modules match : $totalPrismicModules");
