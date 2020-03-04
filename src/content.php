@@ -18,19 +18,20 @@ function checkRichTextModules(Dom $prismicDom, Dom $censhareDom)
     checkRichTextModuleTag($prismicDom, $censhareDom, 'h5');
     checkRichTextModuleTag($prismicDom, $censhareDom, 'h6');
     checkRichTextModuleTag($prismicDom, $censhareDom, 'p');
+    checkRichTextModuleTag($prismicDom, $censhareDom, 'li');
 }
 
 function checkRichTextModuleTag(Dom $prismicDom, Dom $censhareDom, $tagName)
 {
-    $prismicModules  = $prismicDom->find('.content-module.content-module-rich-text > ' . $tagName);
-    $censhareModules = $censhareDom->find('.content-module.content-module-rich-text > ' . $tagName);
+    $prismicModules  = $prismicDom->find('.content-module.content-module-rich-text ' . $tagName);
+    $censhareModules = $censhareDom->find('.content-module.content-module-rich-text ' . $tagName);
 
     $totalPrismicModules  = count($prismicModules);
     $totalCenshareModules = count($censhareModules);
 
     if ($totalPrismicModules !== $totalCenshareModules) {
         logError(
-            "Total <$tagName> HTML modules does not match : $totalPrismicModules in Prismic // $totalCenshareModules in Censhare"
+            "Total <$tagName> tags does not match : $totalPrismicModules in Prismic // $totalCenshareModules in Censhare"
         );
 
         return false;
@@ -40,7 +41,7 @@ function checkRichTextModuleTag(Dom $prismicDom, Dom $censhareDom, $tagName)
         return true;
     }
 
-    logSuccess("Total <$tagName> HTML modules match : $totalPrismicModules");
+    logSuccess("Total <$tagName> tags match : $totalPrismicModules");
 
     $error = false;
     for ($position = 0; $position < $totalPrismicModules; $position++) {
