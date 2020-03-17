@@ -31,7 +31,7 @@ function logInfo($text)
 function getHtmlContent($url)
 {
     $cacheFile = ROOT_PATH . 'var/cache/' . md5($url);
-    if (!file_exists($cacheFile)) {
+    if (!file_exists($cacheFile) || isCacheTooOld($cacheFile)) {
         $arrContextOptions = [
             'ssl' => [
                 'verify_peer'      => false,
@@ -42,6 +42,16 @@ function getHtmlContent($url)
     }
 
     return file_get_contents($cacheFile);
+}
+
+function isCacheTooOld(string $cacheFile): bool
+{
+    $creationTime = @filemtime($cacheFile);
+    if ($creationTime === false) {
+        return true;
+    }
+
+    return time() - $creationTime >= 60 * 24;
 }
 
 function checkTagBySelector(Dom $prismicDom, Dom $censhareDom, $selector, $stripTags = false)
