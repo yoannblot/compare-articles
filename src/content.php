@@ -1,6 +1,7 @@
 <?php
 
 use PHPHtmlParser\Dom;
+use PHPHtmlParser\Dom\HtmlNode;
 
 function checkContent(Dom $prismicDom, Dom $censhareDom)
 {
@@ -156,5 +157,98 @@ function checkEditoCardModules(Dom $prismicDom, Dom $censhareDom)
 
 function checkMediaModules(Dom $prismicDom, Dom $censhareDom)
 {
+    checkImageModules($prismicDom, $censhareDom);
     // TODO
+}
+
+function checkImageModules(Dom $prismicDom, Dom $censhareDom)
+{
+    $prismicModules  = $prismicDom->find('.content-module figure.picture');
+    $censhareModules = $censhareDom->find('.content-module figure.picture');
+
+    $totalPrismicModules  = count($prismicModules);
+    $totalCenshareModules = count($censhareModules);
+    if ($totalPrismicModules !== $totalCenshareModules) {
+        logError(
+            'Total Images from modules does not match!',
+            $totalPrismicModules,
+            $totalCenshareModules
+        );
+
+        return false;
+    }
+
+    if ($totalPrismicModules === 0) {
+        return true;
+    }
+
+    logSuccess("Total Images from modules match : $totalPrismicModules");
+
+    $error = false;
+    for ($position = 0; $position < $totalPrismicModules; $position++) {
+        if (!checkImageAltText($prismicModules[$position], $censhareModules[$position])) {
+            $error = true;
+        }
+        // TODO image caption
+        if (!checkImageCopyright($prismicModules[$position], $censhareModules[$position])) {
+            $error = true;
+        }
+    }
+
+    if (!$error) {
+        logSuccess('All Images from modules match!');
+
+        return true;
+    }
+
+    return false;
+}
+
+function checkImageAltText(HtmlNode $prismicDom, HtmlNode $censhareDom)
+{
+    $prismicImages  = $prismicDom->find('img');
+    $censhareImages = $censhareDom->find('img');
+    if (count($prismicImages) === 0 || count($censhareImages) === 0) {
+        return true;
+    }
+
+    $prismicAltText  = $prismicImages[0]->getAttribute('alt');
+    $censhareAltText = $censhareImages[0]->getAttribute('alt');
+
+    if ($prismicAltText !== $censhareAltText) {
+        logError(
+            'Image alt text does not match!',
+            $prismicAltText,
+            $censhareAltText
+        );
+
+        return false;
+    }
+
+    return true;
+}
+
+function checkImageCopyright(HtmlNode $prismicDom, HtmlNode $censhareDom)
+{
+    $prismicNode  = $prismicDom->find('figcaption .copyright');
+    $censhareNode = $censhareDom->find('figcaption .copyright');
+
+    if (count($prismicNode) === 0 || count($censhareNode) === 0) {
+        return true;
+    }
+
+    $prismicCopyright  = cleanHtmlTag($prismicNode[0]->innerHtml());
+    $censhareCopyright = cleanHtmlTag($censhareNode[0]->innerHtml());
+
+    if ($prismicCopyright !== $censhareCopyright) {
+        logError(
+            'Image copyright does not match!',
+            $prismicCopyright,
+            $censhareCopyright
+        );
+
+        return false;
+    }
+
+    return true;
 }

@@ -7,11 +7,13 @@ function logError($text, $prismicValue = '', $censhareValue = '')
     echo '<p style="color: red;font-weight: bold;"> /!\ ' . $text . '</p>';
     if ($prismicValue !== '') {
         $diff = new Diff(
-            [$prismicValue], [$censhareValue], [
-                               'ignoreNewLines'   => true,
-                               'ignoreWhitespace' => true,
-                               'ignoreCase'       => true
-                           ]
+            [$prismicValue],
+            [$censhareValue],
+            [
+                'ignoreNewLines'   => true,
+                'ignoreWhitespace' => true,
+                'ignoreCase'       => true
+            ]
         );
         echo $diff->render(new Diff_Renderer_Html_Inline());
     }
