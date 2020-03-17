@@ -4,7 +4,6 @@ use PHPHtmlParser\Dom;
 
 function logError($text, $prismicValue = '', $censhareValue = '')
 {
-    echo '<p style="color: red;font-weight: bold;"> /!\ ' . $text . '</p>';
     if ($prismicValue !== '') {
         $diff = new Diff(
             [$prismicValue],
@@ -15,7 +14,7 @@ function logError($text, $prismicValue = '', $censhareValue = '')
                 'ignoreCase'       => true
             ]
         );
-        echo $diff->render(new Diff_Renderer_Html_Inline());
+        echo $diff->render(new Diff_Renderer_Html_SideBySide());
     }
 }
 
